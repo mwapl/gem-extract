@@ -85,4 +85,57 @@ function extractOutstanding() {
     return result;
 }
 
+extractResultsBtn.addEventListener("click", async () => {
+    let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    clearTimeout(timeout);
+    okMessage.style.display = "none";
+    chrome.scripting.executeScript(
+        {
+            target: { tabId: tab.id },
+            function: extractResult,
+        },
+        (results) => {
+            const { result } = results[0];
+            navigator.clipboard.writeText(result);
+            okMessage.style.display = "block";
+            clearTimeout(timeout);
+            timeout = setTimeout(() => (okMessage.style.display = "none"), 3000);
+        }
+    );
+});
 
+function extractResult() {
+    var result = 'Table,"Player 1","Player 2","MatchResult"\n';
+    document.querySelectorAll("table.pairings-table tr").forEach((row) => {
+        const column = row.querySelector('.pairings-table__cell--table-num')
+	const tableColumn = column?.innerText.trim();
+        const tableNumber = tableColumn && parseInt(tableColumn);
+        if (tableColumn && tableNumber && !isNaN(tableNumber)) {
+            const player1Element = row.querySelectorAll('.pairings-table__cell--left .team__display-name span')[1]
+	    const player1PointsStr = row.querySelectorAll('.pairings-table__cell--left .team__info span')[0].innerText.split(/[^0-9]/)
+	    const player1Points = 3*parseInt(player1PointsStr[0]) + parseInt(player1PointsStr[2])
+	   
+	    const player2Element = row.querySelectorAll('.pairings-table__cell--right .team__display-name span')[1]
+	    const player2PointsStr = row.querySelectorAll('.pairings-table__cell--right .team__info span')[0].innerText.split(/[^0-9]/)
+	    const player2Points = 3*parseInt(player2PointsStr[0]) + parseInt(player2PointsStr[2])
+
+	    const matchResult = row.querySelectorAll('.pairings-table__cell--result .match-result')[0]
+	    const player1GameWin = matchResult.childNodes[0].childNodes[0].textContent
+	    const player2GameWin = matchResult.childNodes[2].childNodes[0].textContent
+
+	    
+	    console.log(tableNumber.toString(10) +
+			',"' + player1Element?.innerText?.trim() + '",' + player1GameWin.toString(10) +
+			',"' + player2Element?.innerText?.trim() + '",' + player2GameWin.toString(10)
+		       );
+	    
+	    result += tableNumber.toString(10) +
+		',"' + player1Element?.innerText?.trim() + 
+		'","' + player2Element?.innerText?.trim() +
+		'","' + player1GameWin.toString(10) + ' - ' + player2GameWin.toString(10) +
+		'"\n';
+
+        }
+    });
+    return result;
+}
