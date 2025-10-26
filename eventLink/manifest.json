@@ -2,7 +2,7 @@
     "name": "Event Link Extractor",
     "description": "Extract info from Event Link",
     "version": "1.0",
-    "manifest_version": 3,
+    "manifest_version": 4,
     "action": {
         "default_popup": "popup.html"
     },

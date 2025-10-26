@@ -26,11 +26,12 @@ function extractPairing() {
 	const tableColumn = column?.innerText.trim();
         const tableNumber = tableColumn && parseInt(tableColumn);
         if (tableColumn && tableNumber && !isNaN(tableNumber)) {
-            const player1Element = row.querySelectorAll('.pairings-table__cell--left .team__display-name span')[1]
+            const player1Element = row.querySelectorAll('.pairings-table__cell--left .team__display-name .team__text')[0]
+	    
 	    const player1PointsStr = row.querySelectorAll('.pairings-table__cell--left .team__info span')[0].innerText.split(/[^0-9]/)
 	    const player1Points = 3*parseInt(player1PointsStr[0]) + parseInt(player1PointsStr[2])
 	   
-	    const player2Element = row.querySelectorAll('.pairings-table__cell--right .team__display-name span')[1]
+	    const player2Element = row.querySelectorAll('.pairings-table__cell--right .team__display-name .team__text')[0]
 	    const player2PointsStr = row.querySelectorAll('.pairings-table__cell--right .team__info span')[0].innerText.split(/[^0-9]/)
 	    const player2Points = 3*parseInt(player2PointsStr[0]) + parseInt(player2PointsStr[2])
 	    
@@ -75,7 +76,7 @@ function extractOutstanding() {
 	const tableColumn = column?.innerText.trim();
         const tableNumber = tableColumn && parseInt(tableColumn);
         if (tableColumn && tableNumber && !isNaN(tableNumber)) {
-            const player1Element = row.querySelectorAll('.pairings-table__cell--left .team__display-name span')[1]
+            const player1Element = row.querySelectorAll('.pairings-table__cell--left .team__display-name .team__text')[0]
 	    const match_result = row.querySelectorAll('.pairings-table__cell--result div.match-result div.box-score')
 	    if (match_result.length === 2  // Skip bye awarded player
 		&& match_result[0]?.textContent?.trim() == '_')
@@ -111,11 +112,11 @@ function extractResult() {
 	const tableColumn = column?.innerText.trim();
         const tableNumber = tableColumn && parseInt(tableColumn);
         if (tableColumn && tableNumber && !isNaN(tableNumber)) {
-            const player1Element = row.querySelectorAll('.pairings-table__cell--left .team__display-name span')[1]
+            const player1Element = row.querySelectorAll('.pairings-table__cell--left .team__display-name .team__text')[0]
 	    const player1PointsStr = row.querySelectorAll('.pairings-table__cell--left .team__info span')[0].innerText.split(/[^0-9]/)
 	    const player1Points = 3*parseInt(player1PointsStr[0]) + parseInt(player1PointsStr[2])
 	   
-	    const player2Element = row.querySelectorAll('.pairings-table__cell--right .team__display-name span')[1]
+	    const player2Element = row.querySelectorAll('.pairings-table__cell--right .team__display-name .team__text')[0]
 	    const player2PointsStr = row.querySelectorAll('.pairings-table__cell--right .team__info span')[0].innerText.split(/[^0-9]/)
 	    const player2Points = 3*parseInt(player2PointsStr[0]) + parseInt(player2PointsStr[2])
 
